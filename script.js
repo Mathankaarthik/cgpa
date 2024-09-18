@@ -1,4 +1,4 @@
-// Dictionary to map grades to points
+// Grade to point mapping
 const gradePoints = {
     'O': 10,
     'A+': 9,
@@ -8,59 +8,53 @@ const gradePoints = {
     'C': 5
 };
 
-// Function to dynamically generate input fields for subjects
-function generateSubjectFields() {
-    const numSubjects = document.getElementById("numSubjects").value;
-    const subjectDetails = document.getElementById("subjectDetails");
-    
-    // Clear previous fields
-    subjectDetails.innerHTML = '';
-
-    for (let i = 0; i < numSubjects; i++) {
-        subjectDetails.innerHTML += `
-            <div class="input-group">
-                <label for="subject${i}">Subject ${i + 1} Name:</label>
-                <input type="text" id="subject${i}" required>
-            </div>
-            <div class="input-group">
-                <label for="grade${i}">Grade for Subject ${i + 1} (O, A+, A, B+, B, C):</label>
-                <input type="text" id="grade${i}" required>
-            </div>
-            <div class="input-group">
-                <label for="credits${i}">Credits for Subject ${i + 1}:</label>
-                <input type="number" id="credits${i}" min="1" required>
-            </div>
-        `;
-    }
+// Function to add a new subject input row
+function addSubject() {
+    const subjectsDiv = document.getElementById('subjects');
+    const newSubject = document.createElement('div');
+    newSubject.classList.add('subject');
+    newSubject.innerHTML = `
+        <input type="text" name="subject_name" placeholder="Enter subject name" required>
+        <select name="grade" required>
+            <option value="">Select Grade</option>
+            <option value="O">O</option>
+            <option value="A+">A+</option>
+            <option value="A">A</option>
+            <option value="B+">B+</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+        <input type="number" name="credits" placeholder="Enter credits" required>
+    `;
+    subjectsDiv.appendChild(newSubject);
 }
 
-// Function to calculate GPA
-function calculateGPA() {
-    const numSubjects = document.getElementById("numSubjects").value;
+// GPA calculation
+document.getElementById('gpaForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
     let totalCredits = 0;
     let totalWeightedGradePoints = 0;
+    let valid = true;
 
-    for (let i = 0; i < numSubjects; i++) {
-        const grade = document.getElementById(grade${i}).value.toUpperCase();
-        const credits = parseInt(document.getElementById(credits${i}).value);
+    const subjects = document.querySelectorAll('.subject');
+    subjects.forEach(subject => {
+        const grade = subject.querySelector('select').value;
+        const credits = parseInt(subject.querySelector('input[name="credits"]').value);
 
-        // Check if the entered grade is valid
-        if (!gradePoints[grade]) {
-            document.getElementById("result").innerText = "Invalid grade entered. Please enter a valid grade (O, A+, A, B+, B, C).";
-            return;
+        if (grade && credits) {
+            totalCredits += credits;
+            totalWeightedGradePoints += gradePoints[grade] * credits;
+        } else {
+            valid = false;
+            alert('Please fill in all fields correctly.');
         }
+    });
 
-        // Calculate weighted grade points
-        const weightedGradePoints = gradePoints[grade] * credits;
-        totalWeightedGradePoints += weightedGradePoints;
-        totalCredits += credits;
-    }
-
-    // Calculate GPA
-    if (totalCredits === 0) {
-        document.getElementById("result").innerText = "No valid subjects were entered.";
-    } else {
+    if (valid && totalCredits > 0) {
         const gpa = totalWeightedGradePoints / totalCredits;
-        document.getElementById("result").innerText = Your GPA is: ${gpa.toFixed(2)};
+        document.getElementById('gpaResult').textContent = `Your GPA is: ${gpa.toFixed(2)}`;
+    } else {
+        document.getElementById('gpaResult').textContent = 'No valid subjects were entered.';
     }
-}
+});

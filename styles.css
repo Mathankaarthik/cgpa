@@ -1,55 +1,57 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f9;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    background-color: #f4f4f4;
 }
 
 .container {
-    background-color: white;
+    width: 80%;
+    margin: 50px auto;
+    background: #fff;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
     text-align: center;
+    margin-bottom: 20px;
 }
 
-.input-group {
-    margin-bottom: 15px;
+.subject {
+    margin-bottom: 10px;
 }
 
-label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-input {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
+input, select {
+    padding: 10px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 30%;
 }
 
 button {
-    background-color: #4CAF50;
-    color: white;
     padding: 10px 15px;
+    margin: 10px 5px;
     border: none;
-    border-radius: 5px;
+    background-color: #1338a0;
+    color: white;
     cursor: pointer;
-    margin-top: 10px;
+    border-radius: 4px;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #218838;
 }
 
-#result {
-    margin-top: 20px;
-    font-size: 1.2em;
+#gpaResult {
+    font-size: 20px;
     font-weight: bold;
+    text-align: center;
+    margin-top: 20px;
 }
