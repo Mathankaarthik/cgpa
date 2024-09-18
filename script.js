@@ -54,7 +54,38 @@ document.getElementById('gpaForm').addEventListener('submit', function(e) {
     if (valid && totalCredits > 0) {
         const gpa = totalWeightedGradePoints / totalCredits;
         document.getElementById('gpaResult').textContent = `Your GPA is: ${gpa.toFixed(2)}`;
+        document.getElementById('downloadPdf').style.display = 'block';
+
+        // Attach download PDF event
+        document.getElementById('downloadPdf').onclick = function() {
+            generatePDF(gpa.toFixed(2), subjects);
+        };
     } else {
         document.getElementById('gpaResult').textContent = 'No valid subjects were entered.';
+        document.getElementById('downloadPdf').style.display = 'none';
     }
 });
+
+// Function to generate and download PDF using jsPDF
+function generatePDF(gpa, subjects) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+    doc.text('GPA Report', 90, 20);
+
+    let y = 40; // Starting Y position for subjects
+
+    subjects.forEach(subject => {
+        const subjectName = subject.querySelector('input[name="subject_name"]').value;
+        const grade = subject.querySelector('select').value;
+        const credits = subject.querySelector('input[name="credits"]').value;
+        doc.text(`Subject: ${subjectName} | Grade: ${grade} | Credits: ${credits}`, 20, y);
+        y += 10;
+    });
+
+    doc.text(`Total GPA: ${gpa}`, 20, y + 10);
+
+    // Download the PDF
+    doc.save('gpa_report.pdf');
+}
